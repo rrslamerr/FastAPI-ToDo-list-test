@@ -82,6 +82,14 @@ def get_db():
         db.close()
 
 
+def task_orm_to_model(task_orm: TaskORM) -> TaskSchema:
+    return TaskSchema(
+        id=task_orm.id,
+        title=task_orm.title,
+        completed=task_orm.completed,
+    )
+
+
 @app.get("/tasks")
 def read_tasks() -> list[TaskSchema]:
     return tasks
