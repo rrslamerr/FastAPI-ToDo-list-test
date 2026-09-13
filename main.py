@@ -148,8 +148,9 @@ def delete_task(task_id: str, db: Session = Depends(get_db)) -> None:
 
 
 @app.get("/categories")
-def read_categories() -> list[CategorySchema]:
-    return categories
+def read_categories(db: Session = Depends(get_db)) -> list[CategorySchema]:
+    categories_from_db = db.scalars(select(CategoryORM)).all()
+    return [category_orm_to_model(category) for category in categories_from_db]
 
 
 @app.post("/categories", status_code=status.HTTP_201_CREATED)
