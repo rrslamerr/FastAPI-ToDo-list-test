@@ -74,8 +74,12 @@ class CategoryUpdateSchema(BaseModel):
     name: str | None = None
 
 
-tasks: list[TaskSchema] = []
-categories: list[CategorySchema] = []
+def get_db():
+    db = Sessionlocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 @app.get("/tasks")
