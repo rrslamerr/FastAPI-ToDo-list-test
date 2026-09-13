@@ -181,11 +181,11 @@ def update_category(
 
 
 @app.delete("/categories/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_category(category_id: str):
-    for category in categories:
-        if category.id == category_id:
-            categories.remove(category)
-            return
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
-    )
+def delete_category(category_id: str, db: Session = Depends(get_db)) -> None:
+    category_for_delete = db.get(CategoryORM, category_id)
+    if category_for_delete is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
+        )
+    db.delete(category_for_delete)
+    db.commit()
