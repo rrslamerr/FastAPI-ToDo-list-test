@@ -110,11 +110,13 @@ def read_tasks(db: Session = Depends(get_db)) -> list[TaskSchema]:
 
 
 @app.post("/tasks", status_code=status.HTTP_201_CREATED)
-
-def create_task(payload: TaskCreateSchema) -> TaskSchema:
-    new_task = TaskSchema(id=str(uuid4()), title=payload.title, completed=False)
-    tasks.append(new_task)
-    return new_task
+def create_task(
+    payload: TaskCreateSchema, db: Session = Depends(get_db)
+) -> TaskSchema:
+    new_task = TaskORM(title=payload.title, completed=False)
+    db.add(new_task)
+    db.commit()
+    return task_orm_to_model(new_task)
 
 
 @app.patch("/tasks/{task_id}")
