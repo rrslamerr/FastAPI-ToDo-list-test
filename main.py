@@ -90,6 +90,13 @@ def task_orm_to_model(task_orm: TaskORM) -> TaskSchema:
     )
 
 
+def category_orm_to_model(category_orm: CategoryORM) -> CategorySchema:
+    return CategorySchema(
+        id=category_orm.id,
+        name=category_orm.name,
+    )
+
+
 @app.get("/tasks")
 def read_tasks() -> list[TaskSchema]:
     return tasks
