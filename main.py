@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from typing import Annotated
 from uuid import uuid4
 
 from fastapi import Depends, FastAPI, HTTPException, status
@@ -88,6 +89,9 @@ def get_db():
         db.close()
 
 
+SessionDep = Annotated[Session, Depends(get_db)]
+
+
 def task_orm_to_model(task_orm: TaskORM) -> TaskSchema:
     return TaskSchema(
         id=task_orm.id,
@@ -104,15 +108,13 @@ def category_orm_to_model(category_orm: CategoryORM) -> CategorySchema:
 
 
 @app.get("/tasks")
-def read_tasks(db: Session = Depends(get_db)) -> list[TaskSchema]:
+def read_tasks(db: SessionDep) -> list[TaskSchema]:
     tasks_from_db = db.scalars(select(TaskORM)).all()
     return [task_orm_to_model(task) for task in tasks_from_db]
 
 
 @app.post("/tasks", status_code=status.HTTP_201_CREATED)
-def create_task(
-    payload: TaskCreateSchema, db: Session = Depends(get_db)
-) -> TaskSchema:
+def create_task(payload: TaskCreateSchema, db: SessionDep) -> TaskSchema:
     new_task = TaskORM(title=payload.title, completed=False)
     db.add(new_task)
     db.commit()
@@ -121,7 +123,7 @@ def create_task(
 
 @app.patch("/tasks/{task_id}")
 def update_task(
-    task_id: str, payload: TaskUpdateSchema, db: Session = Depends(get_db)
+    task_id: str, payload: TaskUpdateSchema, db: SessionDep
 ) -> TaskSchema:
     task_for_update = db.get(TaskORM, task_id)
     if task_for_update is None:
@@ -137,7 +139,7 @@ def update_task(
 
 
 @app.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_task(task_id: str, db: Session = Depends(get_db)) -> None:
+def delete_task(task_id: str, db: SessionDep) -> None:
     task_for_delete = db.get(TaskORM, task_id)
     if task_for_delete is None:
         raise HTTPException(
@@ -148,14 +150,14 @@ def delete_task(task_id: str, db: Session = Depends(get_db)) -> None:
 
 
 @app.get("/categories")
-def read_categories(db: Session = Depends(get_db)) -> list[CategorySchema]:
+def read_categories(db: SessionDep) -> list[CategorySchema]:
     categories_from_db = db.scalars(select(CategoryORM)).all()
     return [category_orm_to_model(category) for category in categories_from_db]
 
 
 @app.post("/categories", status_code=status.HTTP_201_CREATED)
 def create_category(
-    payload: CategoryCreateSchema, db: Session = Depends(get_db)
+    payload: CategoryCreateSchema, db: SessionDep
 ) -> CategorySchema:
     new_category = CategoryORM(name=payload.name)
     db.add(new_category)
@@ -167,7 +169,7 @@ def create_category(
 def update_category(
     category_id: str,
     payload: CategoryUpdateSchema,
-    db: Session = Depends(get_db),
+    db: SessionDep,
 ) -> CategorySchema:
     caterory_for_update = db.get(CategoryORM, category_id)
     if caterory_for_update is None:
@@ -181,7 +183,7 @@ def update_category(
 
 
 @app.delete("/categories/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_category(category_id: str, db: Session = Depends(get_db)) -> None:
+def delete_category(category_id: str, db: SessionDep) -> None:
     category_for_delete = db.get(CategoryORM, category_id)
     if category_for_delete is None:
         raise HTTPException(
