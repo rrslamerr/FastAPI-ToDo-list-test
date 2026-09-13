@@ -25,6 +25,12 @@ class TaskORM(Base):
     completed: Mapped[bool] = mapped_column(default=False)
 
 
+class CategoryORM(Base):
+    __tablename__ = "categories"
+
+    name: Mapped[str]
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     Base.metadata.create_all(bind=engine)
