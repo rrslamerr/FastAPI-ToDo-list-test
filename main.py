@@ -164,15 +164,20 @@ def create_category(
 
 
 @app.patch("/categories/{category_id}")
-def update_category(category_id: str, payload: CategoryUpdateSchema):
-    for category in categories:
-        if category.id == category_id:
-            if payload.name:
-                category.name = payload.name
-            return category
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
-    )
+def update_category(
+    category_id: str,
+    payload: CategoryUpdateSchema,
+    db: Session = Depends(get_db),
+) -> CategorySchema:
+    caterory_for_update = db.get(CategoryORM, category_id)
+    if caterory_for_update is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
+        )
+    if payload.name is not None:
+        caterory_for_update.name = payload.name
+    db.commit()
+    return category_orm_to_model(caterory_for_update)
 
 
 @app.delete("/categories/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
