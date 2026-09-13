@@ -13,7 +13,9 @@ Sessionlocal = sessionmaker(bind=engine)
 
 
 class Base(DeclarativeBase):
-    id: Mapped[str] = mapped_column(primary_key=True, default=lambda: str(uuid4()))
+    id: Mapped[str] = mapped_column(
+        primary_key=True, default=lambda: str(uuid4())
+    )
 
 
 class TaskORM(Base):
