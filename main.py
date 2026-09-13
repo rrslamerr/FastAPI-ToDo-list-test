@@ -154,10 +154,13 @@ def read_categories(db: Session = Depends(get_db)) -> list[CategorySchema]:
 
 
 @app.post("/categories", status_code=status.HTTP_201_CREATED)
-def create_category(payload: CategoryCreateSchema) -> CategorySchema:
-    new_category = CategorySchema(id=str(uuid4()), name=payload.name)
-    categories.append(new_category)
-    return new_category
+def create_category(
+    payload: CategoryCreateSchema, db: Session = Depends(get_db)
+) -> CategorySchema:
+    new_category = CategoryORM(name=payload.name)
+    db.add(new_category)
+    db.commit()
+    return category_orm_to_model(new_category)
 
 
 @app.patch("/categories/{category_id}")
