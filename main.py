@@ -137,10 +137,14 @@ def update_task(
 
 
 @app.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_task(task_id: str):
-    for task in tasks:
-        if task.id == task_id:
-            tasks.remove(task)
+def delete_task(task_id: str, db: Session = Depends(get_db)) -> None:
+    task_for_delete = db.get(TaskORM, task_id)
+    if task_for_delete is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"
+        )
+    db.delete(task_for_delete)
+    db.commit()
 
 
 @app.get("/categories")
