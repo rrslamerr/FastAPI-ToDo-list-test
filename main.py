@@ -120,14 +120,20 @@ def create_task(
 
 
 @app.patch("/tasks/{task_id}")
-def update_task(task_id: str, payload: TaskUpdateSchema):
-    for task in tasks:
-        if task.id == task_id:
-            if payload.title:
-                task.title = payload.title
-            if payload.completed is not None:
-                task.completed = payload.completed
-            return task
+def update_task(
+    task_id: str, payload: TaskUpdateSchema, db: Session = Depends(get_db)
+) -> TaskSchema:
+    task_for_update = db.get(TaskORM, task_id)
+    if task_for_update is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"
+        )
+    if payload.title is not None:
+        task_for_update.title = payload.title
+    if payload.completed is not None:
+        task_for_update.completed = payload.completed
+    db.commit()
+    return task_orm_to_model(task_for_update)
 
 
 @app.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
