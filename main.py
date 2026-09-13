@@ -104,8 +104,9 @@ def category_orm_to_model(category_orm: CategoryORM) -> CategorySchema:
 
 
 @app.get("/tasks")
-def read_tasks() -> list[TaskSchema]:
-    return tasks
+def read_tasks(db: Session = Depends(get_db)) -> list[TaskSchema]:
+    tasks_from_db = db.scalars(select(TaskORM)).all()
+    return [task_orm_to_model(task) for task in tasks_from_db]
 
 
 @app.post("/tasks", status_code=status.HTTP_201_CREATED)
