@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -11,7 +13,7 @@ class CategoryRepository:
     def get_all(self) -> list[CategoryORM]:
         return list(self.db.scalars(select(CategoryORM)).all())
 
-    def get_by_id(self, category_id: str) -> CategoryORM:
+    def get_by_id(self, category_id: UUID) -> CategoryORM:
         category = self.db.get(CategoryORM, category_id)
         if category is None:
             raise ValueError(f"category with id {category_id} not found")

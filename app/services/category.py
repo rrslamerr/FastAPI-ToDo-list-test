@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy.orm import Session
 
 from app.core.exceptions import CategoryNotFound
@@ -7,10 +9,6 @@ from app.schemas.category import (
     CategorySchema,
     CategoryUpdateSchema,
 )
-
-
-class CategoryNotFound(Exception):
-    """Category not found"""
 
 
 class CategoryService:
@@ -35,7 +33,7 @@ class CategoryService:
         return CategorySchema.model_validate(category_orm)
 
     def update_category(
-        self, category_id: str, category_update: CategoryUpdateSchema
+        self, category_id: UUID, category_update: CategoryUpdateSchema
     ) -> CategorySchema:
         category_for_update = self.category_repository.get_by_id(
             category_id=category_id
@@ -47,7 +45,7 @@ class CategoryService:
         self.db.commit()
         return CategorySchema.model_validate(category_for_update)
 
-    def delete_category(self, category_id: str) -> None:
+    def delete_category(self, category_id: UUID) -> None:
         category_for_delete = self.category_repository.get_by_id(
             category_id=category_id
         )

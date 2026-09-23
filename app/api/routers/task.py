@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, HTTPException, status
 
 from app.api.dependencies.task import TaskServiceDep
@@ -26,22 +28,26 @@ def create_task(
 
 @router.patch("/{task_id}")
 def update_task(
-    task_id: str,
+    task_id: UUID,
     payload: TaskUpdateSchema,
     task_service: TaskServiceDep,
 ) -> TaskSchema:
     try:
         return task_service.update_task(task_id=task_id, task_update=payload)
-    except TaskNotFound:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    except TaskNotFound as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
+        )
 
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_task(
-    task_id: str,
+    task_id: UUID,
     task_service: TaskServiceDep,
 ) -> None:
     try:
         return task_service.delete_task(task_id=task_id)
-    except TaskNotFound:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    except TaskNotFound as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
+        )
