@@ -13,10 +13,8 @@ class TaskRepository:
     def get_all(self) -> list[TaskORM]:
         return list(self.db.scalars(select(TaskORM)).all())
 
-    def get_by_id(self, task_id: UUID) -> TaskORM:
+    def get_by_id(self, task_id: UUID) -> TaskORM | None:
         task = self.db.get(TaskORM, task_id)
-        if task is None:
-            raise ValueError(f"Task with id {task_id} not found")
         return task
 
     def create(self, title: str) -> TaskORM:

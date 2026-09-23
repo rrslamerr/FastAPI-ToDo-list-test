@@ -13,10 +13,8 @@ class CategoryRepository:
     def get_all(self) -> list[CategoryORM]:
         return list(self.db.scalars(select(CategoryORM)).all())
 
-    def get_by_id(self, category_id: UUID) -> CategoryORM:
+    def get_by_id(self, category_id: UUID) -> CategoryORM | None:
         category = self.db.get(CategoryORM, category_id)
-        if category is None:
-            raise ValueError(f"category with id {category_id} not found")
         return category
 
     def create(self, name: str) -> CategoryORM:
