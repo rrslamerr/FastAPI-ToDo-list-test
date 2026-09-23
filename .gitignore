@@ -1,11 +1,58 @@
-# Python-generated files
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python bytecode and compiled files
 __pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
-.ruff_cache
+*.py[cod]
+*$py.class
+*.so
 
 # Virtual environments
-.venv
+venv/
+.venv/
+env/
+ENV/
+
+# Build and packaging artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test and coverage output
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Linter and type checker caches
+.mypy_cache/
+.ruff_cache/
+
+# Local database files
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs and user-uploaded files
+*.log
+logs/
+uploads/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local Docker overrides
+docker-compose.override.yml
