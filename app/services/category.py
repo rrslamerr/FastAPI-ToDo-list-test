@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 
+from app.core.exceptions import CategoryNotFound
 from app.repositories.category import CategoryRepository
 from app.schemas.category import (
     CategoryCreateSchema,
