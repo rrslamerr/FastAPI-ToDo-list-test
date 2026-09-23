@@ -1,4 +1,4 @@
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from sqlalchemy.orm import (
     DeclarativeBase,
@@ -8,6 +8,4 @@ from sqlalchemy.orm import (
 
 
 class Base(DeclarativeBase):
-    id: Mapped[str] = mapped_column(
-        primary_key=True, default=lambda: str(uuid4())
-    )
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=lambda: uuid4())
