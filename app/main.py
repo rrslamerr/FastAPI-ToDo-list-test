@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routers.category import router as category_router
 from app.api.routers.task import router as task_router
+from app.core.config import settings
 from app.db.session import engine
 from app.models.base import Base
 
@@ -22,6 +23,6 @@ app.include_router(category_router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=settings.cors_origins,
     allow_methods=["*"],
 )
