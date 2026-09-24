@@ -1,10 +1,9 @@
 from uuid import UUID
 
-from sqlalchemy.orm import Session
-
 from app.core.exceptions import TaskNotFound
 from app.repositories.task import TaskRepository
 from app.schemas.task import TaskCreateSchema, TaskSchema, TaskUpdateSchema
+from sqlalchemy.orm import Session
 
 
 class TaskService:
@@ -21,9 +20,7 @@ class TaskService:
         self.db.commit()
         return TaskSchema.model_validate(task_orm)
 
-    def update_task(
-        self, task_id: UUID, task_update: TaskUpdateSchema
-    ) -> TaskSchema:
+    def update_task(self, task_id: UUID, task_update: TaskUpdateSchema) -> TaskSchema:
         task_for_update = self.task_repository.get_by_id(task_id=task_id)
         if task_for_update is None:
             raise TaskNotFound(f"Task with id {task_id} not found")

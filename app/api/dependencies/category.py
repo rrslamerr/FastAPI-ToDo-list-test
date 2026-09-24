@@ -1,9 +1,8 @@
 from typing import Annotated
 
-from fastapi import Depends
-
 from app.api.dependencies.db import SessionDep
 from app.services.category import CategoryService
+from fastapi import Depends
 
 
 def get_category_service(db: SessionDep) -> CategoryService:

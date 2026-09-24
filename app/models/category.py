@@ -1,6 +1,5 @@
-from sqlalchemy.orm import Mapped
-
 from app.models.base import Base
+from sqlalchemy.orm import Mapped
 
 
 class CategoryORM(Base):

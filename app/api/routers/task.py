@@ -1,7 +1,5 @@
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, status
-
 from app.api.dependencies.task import TaskServiceDep
 from app.core.exceptions import TaskNotFound
 from app.schemas.task import (
@@ -9,6 +7,7 @@ from app.schemas.task import (
     TaskSchema,
     TaskUpdateSchema,
 )
+from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter(prefix="/tasks")
 

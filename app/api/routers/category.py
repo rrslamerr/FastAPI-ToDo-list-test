@@ -1,7 +1,5 @@
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, status
-
 from app.api.dependencies.category import CategoryServiceDep
 from app.core.exceptions import CategoryNotFound
 from app.schemas.category import (
@@ -9,6 +7,7 @@ from app.schemas.category import (
     CategorySchema,
     CategoryUpdateSchema,
 )
+from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter(prefix="/categories")
 
@@ -38,18 +37,12 @@ def update_category(
             category_id=category_id, category_update=payload
         )
     except CategoryNotFound as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 
 @router.delete("/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_category(
-    category_id: UUID, category_service: CategoryServiceDep
-) -> None:
+def delete_category(category_id: UUID, category_service: CategoryServiceDep) -> None:
     try:
         category_service.delete_category(category_id=category_id)
     except CategoryNotFound as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))

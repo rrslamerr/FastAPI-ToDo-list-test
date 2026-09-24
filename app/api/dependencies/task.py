@@ -1,9 +1,8 @@
 from typing import Annotated
 
-from fastapi import Depends
-
 from app.api.dependencies.db import SessionDep
 from app.services.task import TaskService
+from fastapi import Depends
 
 
 def get_task_service(db: SessionDep) -> TaskService:

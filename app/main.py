@@ -1,13 +1,12 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
 from app.api.routers.category import router as category_router
 from app.api.routers.task import router as task_router
 from app.core.config import settings
 from app.db.session import engine
 from app.models.base import Base
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 
 @asynccontextmanager
