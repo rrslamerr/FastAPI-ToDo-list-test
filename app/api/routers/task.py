@@ -34,9 +34,7 @@ def update_task(
     try:
         return task_service.update_task(task_id=task_id, task_update=payload)
     except TaskNotFound as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -47,6 +45,4 @@ def delete_task(
     try:
         return task_service.delete_task(task_id=task_id)
     except TaskNotFound as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
