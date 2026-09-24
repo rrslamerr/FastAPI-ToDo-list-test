@@ -8,4 +8,4 @@ from sqlalchemy.orm import (
 
 
 class Base(DeclarativeBase):
-    id: Mapped[UUID] = mapped_column(primary_key=True, default=lambda: uuid4())
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
