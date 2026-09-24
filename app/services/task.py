@@ -34,6 +34,6 @@ class TaskService:
     def delete_task(self, task_id: UUID) -> None:
         task_for_delete = self.task_repository.get_by_id(task_id=task_id)
         if task_for_delete is None:
-            raise TaskNotFound(f"Task with {task_id} not found")
+            raise TaskNotFound(f"Task with id {task_id} not found")
         self.task_repository.delete(task_for_delete)
         self.db.commit()
