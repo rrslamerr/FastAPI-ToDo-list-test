@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class CategorySchema(BaseModel):
@@ -11,8 +11,15 @@ class CategorySchema(BaseModel):
 
 
 class CategoryCreateSchema(BaseModel):
-    name: str
+    name: str = Field(
+        min_length=1,
+        max_length=100,
+    )
 
 
 class CategoryUpdateSchema(BaseModel):
-    name: str | None = None
+    name: str | None = Field(
+        min_length=1,
+        max_length=100,
+        default=None,
+    )

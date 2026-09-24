@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class TaskSchema(BaseModel):
@@ -12,9 +12,16 @@ class TaskSchema(BaseModel):
 
 
 class TaskCreateSchema(BaseModel):
-    title: str
+    title: str = Field(
+        min_length=1,
+        max_length=100,
+    )
 
 
 class TaskUpdateSchema(BaseModel):
-    title: str | None = None
+    title: str | None = Field(
+        min_length=1,
+        max_length=100,
+        default=None,
+    )
     completed: bool | None = None
