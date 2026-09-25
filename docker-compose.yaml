@@ -1,0 +1,26 @@
+services:
+  backend:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "8080:8000"
+    volumes:
+      - .:/backend
+      - /backend/.venv
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:18-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+
+volumes:
+  postgres_data:
