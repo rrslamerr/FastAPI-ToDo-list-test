@@ -2,11 +2,14 @@ import logging
 from time import perf_counter
 
 from fastapi import Request, Response
+from starlette.middleware.base import RequestResponseEndpoint
 
 logger = logging.getLogger("app.middleware")
 
 
-async def log_requests(request: Request, call_next) -> Response:
+async def log_requests(
+    request: Request, call_next: RequestResponseEndpoint
+) -> Response:
     started_at = perf_counter()
     try:
         response: Response = await call_next(request)
@@ -34,7 +37,9 @@ async def log_requests(request: Request, call_next) -> Response:
 request_count = 0
 
 
-async def request_number(request: Request, call_next) -> Response:
+async def request_number(
+    request: Request, call_next: RequestResponseEndpoint
+) -> Response:
     response = await call_next(request)
     global request_count
     request_count += 1
