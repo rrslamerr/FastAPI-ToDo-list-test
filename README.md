@@ -116,6 +116,10 @@ uv run alembic revision --autogenerate -m "message"
 uv run alembic upgrade head
 ```
 
+## License
+
+MIT — see [LICENSE](LICENSE).
+
 ## Notes
 
 - CORS origins are configurable via `CORS_ORIGINS` in `.env`.
