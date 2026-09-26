@@ -2,24 +2,24 @@ from uuid import UUID
 
 from app.models.task import TaskORM
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class TaskRepository:
-    def __init__(self, db: Session) -> None:
+    def __init__(self, db: AsyncSession) -> None:
         self.db = db
 
-    def get_all(self) -> list[TaskORM]:
-        return list(self.db.scalars(select(TaskORM)).all())
+    async def get_all(self) -> list[TaskORM]:
+        return list((await self.db.scalars(select(TaskORM))).all())
 
-    def get_by_id(self, task_id: UUID) -> TaskORM | None:
-        task = self.db.get(TaskORM, task_id)
+    async def get_by_id(self, task_id: UUID) -> TaskORM | None:
+        task = await self.db.get(TaskORM, task_id)
         return task
 
-    def create(self, title: str) -> TaskORM:
+    async def create(self, title: str) -> TaskORM:
         new_task = TaskORM(title=title, completed=False)
         self.db.add(new_task)
         return new_task
 
-    def delete(self, task: TaskORM) -> None:
-        self.db.delete(task)
+    async def delete(self, task: TaskORM) -> None:
+        await self.db.delete(task)
