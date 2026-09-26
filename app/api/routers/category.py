@@ -38,7 +38,7 @@ async def update_category(
             category_id=category_id, category_update=payload
         )
     except CategoryNotFound as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e)) from e
 
 
 @router.delete("/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -48,4 +48,4 @@ async def delete_category(
     try:
         await category_service.delete_category(category_id=category_id)
     except CategoryNotFound as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e)) from e
