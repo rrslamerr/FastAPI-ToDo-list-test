@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from fastapi import APIRouter, HTTPException, status
+
 from app.api.dependencies.category import CategoryServiceDep
 from app.core.exceptions import CategoryNotFound
 from app.schemas.category import (
@@ -7,7 +9,6 @@ from app.schemas.category import (
     CategorySchema,
     CategoryUpdateSchema,
 )
-from fastapi import APIRouter, HTTPException, status
 
 router = APIRouter(prefix="/categories")
 

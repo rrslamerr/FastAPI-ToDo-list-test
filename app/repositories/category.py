@@ -1,8 +1,9 @@
 from uuid import UUID
 
-from app.models.category import CategoryORM
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models.category import CategoryORM
 
 
 class CategoryRepository:

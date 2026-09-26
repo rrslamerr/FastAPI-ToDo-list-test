@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.exceptions import CategoryNotFound
 from app.repositories.category import CategoryRepository
 from app.schemas.category import (
@@ -7,7 +9,6 @@ from app.schemas.category import (
     CategorySchema,
     CategoryUpdateSchema,
 )
-from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class CategoryService:

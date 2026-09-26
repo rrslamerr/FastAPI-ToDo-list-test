@@ -1,9 +1,10 @@
 from uuid import UUID
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.exceptions import TaskNotFound
 from app.repositories.task import TaskRepository
 from app.schemas.task import TaskCreateSchema, TaskSchema, TaskUpdateSchema
-from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class TaskService:

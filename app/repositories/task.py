@@ -1,8 +1,9 @@
 from uuid import UUID
 
-from app.models.task import TaskORM
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models.task import TaskORM
 
 
 class TaskRepository:
