@@ -55,6 +55,7 @@ async def test_create_task_commits_created_task(
 
     task_repository_mock.create.assert_called_once_with(title="Новая задача")
     db_mock.commit.assert_called_once_with()
+
     assert result.model_dump() == {
         "id": UUID("00000000-0000-0000-0000-000000000001"),
         "title": "Новая задача",
@@ -95,6 +96,7 @@ async def test_update_task_updates_only_passed_fields(
         task_id=UUID("00000000-0000-0000-0000-000000000001")
     )
     db_mock.commit.assert_called_once_with()
+
     assert result.model_dump() == {
         "id": UUID("00000000-0000-0000-0000-000000000001"),
         "title": expected_title,
@@ -142,3 +144,22 @@ async def test_delete_task(
     db_mock.commit.assert_called_once_with()
 
     assert result is None
+
+
+async def test_delete_task_raises_when_task_not_found(
+    task_service: TaskService,
+    task_repository_mock: Mock,
+    db_mock: Mock,
+) -> None:
+    task_repository_mock.get_by_id.return_value = None
+
+    with pytest.raises(TaskNotFound):
+        await task_service.delete_task(
+            UUID("00000000-0000-0000-0000-000000000001"),
+        )
+
+    task_repository_mock.get_by_id.assert_called_once_with(
+        task_id=UUID("00000000-0000-0000-0000-000000000001")
+    )
+    task_repository_mock.delete.assert_not_called()
+    db_mock.commit.assert_not_called()
