@@ -104,3 +104,26 @@ async def test_category_update_raises_when_category_not_found(
         )
 
     db_mock.commit.assert_not_called()
+
+
+async def test_delete_category(
+    category_service: CategoryService, category_repository_mock: Mock, db_mock: Mock
+) -> None:
+    category = CategoryORM(
+        id=UUID("00000000-0000-0000-0000-000000000001"),
+        name="Тестовая категория",
+    )
+
+    category_repository_mock.get_by_id.return_value = category
+
+    result = await category_service.delete_category(
+        category_id=UUID("00000000-0000-0000-0000-000000000001")
+    )
+
+    category_repository_mock.delete.assert_called_once_with(category)
+    category_repository_mock.get_by_id.assert_called_once_with(
+        category_id=UUID("00000000-0000-0000-0000-000000000001")
+    )
+    db_mock.commit.assert_called_once_with()
+
+    assert result is None
