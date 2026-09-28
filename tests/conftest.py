@@ -3,7 +3,9 @@ from unittest.mock import Mock
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.repositories.category import CategoryRepository
 from app.repositories.task import TaskRepository
+from app.services.category import CategoryService
 from app.services.task import TaskService
 
 
@@ -13,12 +15,24 @@ def db_mock() -> Mock:
 
 
 @pytest.fixture
-def repository_mock() -> Mock:
+def task_repository_mock() -> Mock:
     return Mock(spec=TaskRepository)
 
 
 @pytest.fixture
-def service(db_mock: Mock, repository_mock: Mock) -> TaskService:
+def task_service(db_mock: Mock, task_repository_mock: Mock) -> TaskService:
     task_service = TaskService(db_mock)
-    task_service.task_repository = repository_mock
+    task_service.task_repository = task_repository_mock
     return task_service
+
+
+@pytest.fixture
+def category_repository_mock() -> Mock:
+    return Mock(spec=CategoryRepository)
+
+
+@pytest.fixture
+def category_service(db_mock: Mock, category_repository_mock: Mock) -> CategoryService:
+    category_service = CategoryService(db_mock)
+    category_service.category_repository = category_repository_mock
+    return category_service
