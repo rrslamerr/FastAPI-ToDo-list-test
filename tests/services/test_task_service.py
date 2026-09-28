@@ -116,3 +116,29 @@ async def test_update_task_raises_when_task_not_found(
         )
 
     db_mock.commit.assert_not_called()
+
+
+async def test_delete_task(
+    task_service: TaskService,
+    task_repository_mock: Mock,
+    db_mock: Mock,
+) -> None:
+    task = TaskORM(
+        id=UUID("00000000-0000-0000-0000-000000000001"),
+        title="Тестовая задача",
+        completed=True,
+    )
+
+    task_repository_mock.get_by_id.return_value = task
+
+    result = await task_service.delete_task(
+        UUID("00000000-0000-0000-0000-000000000001")
+    )
+
+    task_repository_mock.delete.assert_called_once_with(task)
+    task_repository_mock.get_by_id.assert_called_once_with(
+        task_id=UUID("00000000-0000-0000-0000-000000000001")
+    )
+    db_mock.commit.assert_called_once_with()
+
+    assert result is None
