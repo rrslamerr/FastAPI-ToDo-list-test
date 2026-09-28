@@ -127,3 +127,18 @@ async def test_delete_category(
     db_mock.commit.assert_called_once_with()
 
     assert result is None
+
+
+async def test_category_delete_raises_when_category_not_found(
+    category_service: CategoryService,
+    category_repository_mock: Mock,
+    db_mock: Mock,
+) -> None:
+    category_repository_mock.get_by_id.return_value = None
+    with pytest.raises(CategoryNotFound):
+        await category_service.update_category(
+            UUID("00000000-0000-0000-0000-000000000001"),
+            CategoryUpdateSchema(name="Неважно"),
+        )
+
+    db_mock.commit.assert_not_called()
