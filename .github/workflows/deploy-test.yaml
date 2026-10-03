@@ -1,0 +1,21 @@
+name: Deploy to test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deplo-to-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Prepare .env file
+        run: cp .env.example .env
+
+      - name: Remove previous deploy
+        run: docker compose -p todo-test down -v
+
+      - name: Deploy Project
+        run: docker compose up -p todo-test --build
