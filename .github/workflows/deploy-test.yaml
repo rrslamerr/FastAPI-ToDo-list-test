@@ -18,4 +18,4 @@ jobs:
         run: docker compose -p todo-test down -v
 
       - name: Deploy Project
-        run: docker compose up -p todo-test --build
+        run: docker compose -p todo-test up --build -d
