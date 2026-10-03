@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deplo-to-test:
+  deploy-to-test:
     runs-on: ubuntu-latest
 
     steps:
